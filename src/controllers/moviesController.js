@@ -39,4 +39,58 @@ module.exports = {
         })
         .catch(error => console.log(error))
     },
+    add: (req, res) => {
+        const genres = db.Genre.findAll();
+            return res.render("moviesAdd", {
+                genres,
+            });
+        } ,
+    create: (req, res) => {
+        db.Movie.create({
+            ...req.body,
+        })
+        .then(() =>{
+            res.redirect('/movies')
+        })
+        .catch(errors => console.log(errors));
+    },
+
+    edit: (req, res) => {
+        let movie = db.Movie.findByPk(req.params.id)
+        .then(movie => {
+            return res.render ('moviesEdit', {movie})
+        })
+        .catch(error => console.log(error))
+    } ,
+    
+    update: (req,res) => {
+        db.Movie.findByPk(req.params.id)
+        db.Movie.update({
+            ...req.body,
+        },{
+            where : {id : req.params.id}
+        })
+        .then(() =>{
+            res.redirect('/movies')
+        })
+        .catch(errors => console.log(errors));
+    },
+ 
+    remove: (req, res) => {
+        let movie = db.Movie.findByPk(req.params.id)
+        .then(movie => {
+            return res.render ('moviesDelete', {movie})
+        })
+        .catch(error => console.log(error))
+    },
+    destroy: (req, res) =>{
+        db.Movie.findByPk(req.params.id)
+        db.Movie.destroy({
+            where : {id : req.params.id}
+        })
+        .then(() =>{
+            res.redirect('/movies')
+        })
+        .catch(errors => console.log(errors)); 
+    }  
 }
